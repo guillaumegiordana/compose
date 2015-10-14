@@ -51,8 +51,6 @@ web:
     - /Users/Guillaume/Docker/compose/000-default.conf:/etc/apache2/sites-enabled/000-default.conf
   environment:
     - ALLOW_OVERRIDE=true
-  extra_hosts:
-    - "localhost:192.168.59.103"
   links:
     - db:db
     - mail:mail

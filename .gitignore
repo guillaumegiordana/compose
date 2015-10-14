@@ -1,0 +1,13 @@
+### Example user template template
+### Example user template
+
+**/data/tlog/
+**/logs/
+**/data/index/
+**/logs/*
+*~
+.DS_Store
+.buildpath
+.project
+.settings
+.idea/

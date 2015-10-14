@@ -1,0 +1,62 @@
+pma:
+  image: dnhsoft/phpmyadmin:4.3.6
+  links:
+    - db
+  ports:
+    - "8001:80"
+  environment:
+    - DBHOST=db
+    - DBUSER=root
+    - DBPASS=root
+db:
+  image: mysql:5.5
+  volumes:
+    - /var/lib/boot2docker/mysql:/var/lib/mysql
+  ports:
+    - "3306:3306"
+  environment:
+    - MYSQL_ROOT_PASSWORD=root
+    - MYSQL_PASS=root
+memcached:
+  image: memcached
+  ports:
+    - "11211:11211"
+mail:
+  image: djfarrelly/maildev
+  ports:
+    - "1080:80"
+solr5:
+  build: solr5
+  volumes:
+    - /Users/Guillaume/Sites/solr/solr/server/solr/configsets:/opt/solr-5.3.0/server/solr/configsets
+    - /Users/Guillaume/Sites/solr/solr/server/solr/eshops:/opt/solr-5.3.0/server/solr/eshops
+  ports:
+    - "8984:8984"
+solr3:
+  build: solr3
+  volumes:
+    - /Users/Guillaume/Sites/solr/trunk/theoz:/opt/apache-solr-3.6.1/theoz
+  ports:
+    - "8983:8983"
+  links:
+    - db:db
+web:
+  build: web
+  ports:
+    - "80:80"
+  volumes:
+    - /Users/Guillaume/Sites:/var/www
+    - /Users/Guillaume/.n98-magerun:/var/www/.n98-magerun/scripts
+    - /Users/Guillaume/Docker/compose/30-custom.ini:/etc/php5/apache2/conf.d/30-custom.ini
+    - /Users/Guillaume/Docker/compose/000-default.conf:/etc/apache2/sites-enabled/000-default.conf
+  environment:
+    - ALLOW_OVERRIDE=true
+  extra_hosts:
+    - "localhost:192.168.59.103"
+  links:
+    - db:db
+    - mail:mail
+    - memcached:memcached
+    - solr3:solr3
+    - solr5:solr5
+    - pma:pma

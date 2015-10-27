@@ -1,0 +1,49 @@
+solr5:
+  extends:
+    file: common/docker-compose.yml
+    service: solr5
+  volumes:
+    - /Users/Guillaume/Sites/solr/solr/server/solr/configsets:/opt/solr-5.3.0/server/solr/configsets
+    - /Users/Guillaume/Sites/solr/solr/server/solr/eshops:/opt/solr-5.3.0/server/solr/eshops
+solr3:
+  extends:
+    file: common/docker-compose.yml
+    service: solr3
+  volumes:
+    - /Users/Guillaume/Sites/solr/trunk/theoz:/opt/apache-solr-3.6.1/theoz
+  links:
+    - db:db
+web:
+  extends:
+      file: common/docker-compose.yml
+      service: web
+  volumes:
+    - /Users/Guillaume/Sites:/var/www
+    - /Users/Guillaume/.n98-magerun:/var/www/.n98-magerun/scripts
+    - /Users/Guillaume/Docker/compose/common/30-custom.ini:/etc/php5/apache2/conf.d/30-custom.ini
+    - /Users/Guillaume/Docker/compose/common/000-default.conf:/etc/apache2/sites-enabled/000-default.conf
+  links:
+    - db:db
+    - mail:mail
+    - memcached:memcached
+    - solr3:solr3
+    - solr5:solr5
+    - pma:pma
+db:
+  extends:
+    file: common/docker-compose.yml
+    service: db
+memcached:
+  extends:
+    file: common/docker-compose.yml
+    service: memcached
+mail:
+  extends:
+    file: common/docker-compose.yml
+    service: mail
+pma:
+  extends:
+    file: common/docker-compose.yml
+    service: pma
+  links:
+    - db:db

@@ -1,5 +1,5 @@
 FROM tutum/apache-php
-MAINTAINER Michael Rivet <michael.rivet@the-oz.com>
+MAINTAINER Guillaume Giordana <guillaume.giordana@the-oz.com>
 
 RUN apt-get update && \
 	apt-get -yq install \

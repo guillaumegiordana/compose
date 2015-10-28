@@ -7,11 +7,15 @@ pma:
     - DBHOST=db
     - DBUSER=root
     - DBPASS=root
+data-db:
+  image: busybox
+  volumes :
+    - /var/lib/boot2docker/mysql:/var/lib/mysql
+data-web:
+  image: busybox
 db:
   restart: always
   image: percona:5.5
-  volumes:
-    - /var/lib/boot2docker/mysql:/var/lib/mysql
   ports:
     - "3306:3306"
   environment:

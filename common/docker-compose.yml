@@ -34,12 +34,12 @@ mail:
     - "1080:80"
 solr5:
   restart: always
-  build: solr5
+  image: giorg/solr:5.3.0
   ports:
-    - "8984:8984"
+    - "8984:8983"
 solr3:
   restart: always
-  build: solr3
+  image: giorg/solr:3.6.1
   ports:
     - "8983:8983"
 web:

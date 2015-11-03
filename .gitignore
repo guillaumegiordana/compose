@@ -11,3 +11,5 @@
 .project
 .settings
 .idea/
+
+/development/docker-compose.yml

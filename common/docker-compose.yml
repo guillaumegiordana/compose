@@ -44,7 +44,7 @@ solr3:
     - "8983:8983"
 web:
   restart: always
-  build: web
+  image: giorg/php
   ports:
     - "80:80"
   environment:

@@ -40,6 +40,7 @@ data-web:
     file: ../common/docker-compose.yml
     service: data-web
   volumes:
+    # boot2docker nfs : https://gist.github.com/mattes/4d7f435d759ca2581347
     # Add your www directory volume Ex :
     # For Linux and OSX :
     # - /Users/Guillaume/Sites:/var/www

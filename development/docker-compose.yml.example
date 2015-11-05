@@ -46,8 +46,9 @@ data-web:
     #For Windows :
     # - /var/www/html:/var/www/html
     # Pour créer un samba :
+    # docker run --rm -v $(which docker):/docker -v /var/run/docker.sock:/docker.sock -it giorg/samba development_data-web_1
     # docker run -d -it --name samba -h samba -p 138:138/udp -p 139:139 -p 445:445 -p 445:445/udp --volumes-from development_data-web_1 appcontainers/samba
-    # docker exec samba chmod -R ugo+rwx /var/www/
+    # docker exec samba-server chmod -R ugo+rwx /var/www/
     # pour se connecter ensuite : smb://IP_du_docker. Dossier public
 data-db:
   extends:

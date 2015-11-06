@@ -26,6 +26,8 @@ web:
   volumes:
     - /Users/Guillaume/Docker/compose/common/30-custom.ini:/etc/php5/apache2/conf.d/30-custom.ini
     - /Users/Guillaume/Docker/compose/common/000-default.conf:/etc/apache2/sites-enabled/000-default.conf
+    # Si nginx :
+    # - /Users/Guillaume/Docker/compose/common/ports.conf:/etc/apache2/conf.d/ports.conf
   volumes_from:
     - data-web
   links:
@@ -74,3 +76,11 @@ pma:
     service: pma
   links:
     - db:db
+#nginx:
+#  extends:
+#    file: ../common/docker-compose.yml
+#    service: nginx
+#  volumes:
+#    - "/Users/Guillaume/Docker/compose/common/nginx/nginx.conf:/etc/nginx/nginx.conf"
+#    - "/Users/Guillaume/Docker/compose/common/nginx/conf.d:/etc/nginx/conf.d"
+#    - "/Users/Guillaume/Docker/compose/common/nginx/sites-enabled:/etc/nginx/sites-enabled"

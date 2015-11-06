@@ -46,6 +46,13 @@ web:
   restart: always
   image: giorg/php
   ports:
+    # Si nginx :
+    #- "8080:80"
+    # Si apache seul :
     - "80:80"
   environment:
     - ALLOW_OVERRIDE=true
+#nginx:
+#  image: nginx
+#  ports:
+#    - "80:80"

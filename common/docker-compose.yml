@@ -1,6 +1,6 @@
 pma:
   restart: always
-  image: dnhsoft/phpmyadmin:4.3.6
+  image: dnhsoft/phpmyadmin:latest
   ports:
     - "8001:80"
   environment:
@@ -10,12 +10,12 @@ pma:
 data-db:
   image: busybox
   volumes :
-    - /var/lib/boot2docker/mysql:/var/lib/mysql
+    - /var/lib/boot2docker/mariadb/mysql:/var/lib/mysql
 data-web:
   image: busybox
 db:
   restart: always
-  image: percona:5.5
+  image: mariadb
   ports:
     - "3306:3306"
   environment:

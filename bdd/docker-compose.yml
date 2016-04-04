@@ -1,0 +1,20 @@
+web:
+  extends:
+    file: ../common/docker-compose.yml
+    service: web
+mysql-data:
+  extends:
+    file: ../common/docker-compose.yml
+    service: mysql-data
+mysql:
+  extends:
+    file: ../common/docker-compose.yml
+    service: mysql-data
+  volumes_from:
+      - mysql-data
+phpmyadmin:
+  extends:
+    file: ../common/docker-compose.yml
+    service: phpmyadmin
+  links:
+    - mysql

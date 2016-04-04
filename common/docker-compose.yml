@@ -1,58 +1,113 @@
-pma:
-  restart: always
-  image: dnhsoft/phpmyadmin:latest
-  ports:
-    - "8001:80"
-  environment:
-    - DBHOST=db
-    - DBUSER=root
-    - DBPASS=root
-data-db:
-  image: busybox
-  volumes :
-    - /var/lib/boot2docker/mariadb/mysql:/var/lib/mysql
-data-web:
-  image: busybox
-db:
-  restart: always
-  image: mariadb
-  ports:
-    - "3306:3306"
-  environment:
-    - MYSQL_ROOT_PASSWORD=root
-    - MYSQL_PASS=root
-    - MYSQL_PASSWORD=root
-memcached:
-  restart: always
-  image: memcached
-  ports:
-    - "11211:11211"
-mail:
-  restart: always
-  image: djfarrelly/maildev
-  ports:
-    - "1080:80"
-solr5:
-  restart: always
-  image: giorg/solr:5.3.0
-  ports:
-    - "8984:8983"
-solr3:
-  restart: always
-  image: giorg/solr:3.6.1
-  ports:
-    - "8983:8983"
-web:
-  restart: always
-  image: giorg/php
-  ports:
-    # Si nginx :
-    #- "8080:80"
-    # Si apache seul :
-    - "80:80"
-  environment:
-    - ALLOW_OVERRIDE=true
-#nginx:
-#  image: nginx
-#  ports:
-#    - "80:80"
+version: '2'
+services:
+  web:
+    restart: always
+    image: giorg/php:latest
+    container_name: web
+    volumes_from:
+      - web-data
+    depends_on:
+      - mysql
+      - mongodb
+      - memcached
+    ports:
+      - "80:80"
+    environment:
+      - ALLOW_OVERRIDE=true
+    networks:
+      - front
+      - back
+  web-data:
+    image: busybox
+    container_name: web-data
+    volumes:
+      - ~/www:/var/www
+  mysql:
+    restart: always
+    image: mariadb
+    container_name: mysql
+    volumes_from:
+      - mysql-data
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_PASS=root
+      - MYSQL_PASSWORD=root
+    networks:
+      - back
+  mysql-data:
+    image: busybox
+    container_name: mysql-data
+    volumes:
+      - /var/lib/boot2docker/mysql:/var/lib/mysql
+  mongodb:
+    restart: always
+    image: mongo:2.4.14
+    container_name: mongodb
+    volumes_from:
+      - mongodb-data
+    ports:
+      - "27017:27017"
+    networks:
+      - back
+  mongodb-data:
+    image: busybox
+    container_name: mongodb-data
+    volumes:
+      - /var/lib/boot2docker/mongo/data/db:/data/db
+  solr:
+    restart: always
+    image: giorg/solr:5.3.0
+    container_name: solr
+    volumes_from:
+      - solr-data
+    depends_on:
+      - web
+    ports:
+      - "8983:8983"
+    networks:
+      - back
+  solr-data:
+    image: busybox
+    container_name: solr-data
+    volumes:
+      - ~/www/solr/server/solr/:/opt/solr/server/solr/
+  memcached:
+    restart: always
+    image: memcached
+    container_name: memcached
+    ports:
+      - "11211:11211"
+    networks:
+      - back
+  mail:
+    restart: always
+    image: djfarrelly/maildev
+    container_name: mail
+    depends_on:
+      - web
+    ports:
+      - "1080:80"
+    networks:
+      - back
+  phpmyadmin:
+    restart: always
+    image: dnhsoft/phpmyadmin:latest
+    container_name: phpmyadmin
+    depends_on:
+      - web
+      - mysql
+    ports:
+      - "8001:80"
+    environment:
+      - DBHOST=mysql
+      - DBUSER=root
+      - DBPASS=root
+    networks:
+      - back
+networks:
+  front:
+    driver: bridge
+  back:
+    driver: bridge

@@ -138,8 +138,8 @@ services:
     container_name: logstash
     command: logstash -f /etc/logstash/conf.d/logstash.conf
     ports:
-            - "12201:12201"
-            - "12201:12201/udp"
+      - "12201:12201"
+      - "12201:12201/udp"
     links:
       - elasticsearch
   kibana:

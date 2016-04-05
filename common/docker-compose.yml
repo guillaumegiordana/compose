@@ -10,13 +10,11 @@ services:
       - mysql
       - mongodb
       - memcached
+      - web-data
     ports:
       - "80:80"
     environment:
       - ALLOW_OVERRIDE=true
-    networks:
-      - front
-      - back
   web-data:
     image: busybox
     container_name: web-data
@@ -26,6 +24,8 @@ services:
     restart: always
     image: mariadb
     container_name: mysql
+    depends_on:
+      - mysql-data
     volumes_from:
       - mysql-data
     ports:
@@ -34,8 +34,6 @@ services:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_PASS=root
       - MYSQL_PASSWORD=root
-    networks:
-      - back
   mysql-data:
     image: busybox
     container_name: mysql-data
@@ -45,12 +43,12 @@ services:
     restart: always
     image: mongo:2.4.14
     container_name: mongodb
+    depends_on:
+      - mongodb-data
     volumes_from:
       - mongodb-data
     ports:
       - "27017:27017"
-    networks:
-      - back
   mongodb-data:
     image: busybox
     container_name: mongodb-data
@@ -66,8 +64,6 @@ services:
       - web
     ports:
       - "8983:8983"
-    networks:
-      - back
   solr-data:
     image: busybox
     container_name: solr-data
@@ -79,8 +75,6 @@ services:
     container_name: memcached
     ports:
       - "11211:11211"
-    networks:
-      - back
   mail:
     restart: always
     image: djfarrelly/maildev
@@ -89,8 +83,6 @@ services:
       - web
     ports:
       - "1080:80"
-    networks:
-      - back
   phpmyadmin:
     restart: always
     image: dnhsoft/phpmyadmin:latest
@@ -104,10 +96,3 @@ services:
       - DBHOST=mysql
       - DBUSER=root
       - DBPASS=root
-    networks:
-      - back
-networks:
-  front:
-    driver: bridge
-  back:
-    driver: bridge

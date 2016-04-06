@@ -127,6 +127,7 @@ services:
         gelf-address: "udp://localhost:12201"
         tag: "phpmyadmin"
   elasticsearch:
+    restart: always
     image: elasticsearch:latest
     container_name: elasticsearch
     command: elasticsearch -Des.network.host=0.0.0.0
@@ -134,6 +135,7 @@ services:
       - "9200:9200"
       - "9300:9300"
   logstash:
+    restart: always
     image: giorg/logstash:latest
     container_name: logstash
     command: logstash -f /etc/logstash/conf.d/logstash.conf
@@ -143,6 +145,7 @@ services:
     links:
       - elasticsearch
   kibana:
+    restart: always
     image: giorg/kibana:latest
     container_name: kibana
     ports:
